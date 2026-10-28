@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#115740">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ئامادەبوون">
+<title>ئامادەبوون — بەشی کاری کۆمەڵایەتی</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+
+<!-- فۆنتی کوردی. ئەگەر ئینتەرنێت نەبوو، فۆنتی ئامێرەکە بەکاردێت. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ڕێکخستنی پەیوەندی لە config.js ـە — ئەو فایلە دەستکاری بکە، نەک ئەمە. -->
+<script src="config.js"></script>
+
+<style>
+:root{
+  --brand:#115740; --brand-700:#17694e; --brand-50:#e9f2ed; --brand-100:#d3e6dc;
+  --gold:#e0a526; --gold-dk:#b07f12; --gold-50:#fdf6e6;
+  --ink:#0d1b16; --ink-2:#44564e; --ink-3:#7d9188;
+  --line:#e2ebe6; --bg:#f4f8f6; --card:#ffffff;
+  --ok:#0f9d6b; --ok-bg:#e7f7f0;
+  --warn:#d98216; --warn-bg:#fdf3e4;
+  --bad:#c0392b; --bad-bg:#fdeceb;
+  --info:#2563c7; --info-bg:#e9f1fd;
+  --eve:#5b4bb8; --eve-bg:#eeebfa;
+  --r:18px; --r-sm:12px;
+  --shadow:0 1px 2px rgba(13,27,22,.05),0 10px 28px -14px rgba(13,27,22,.20);
+  --shadow-lg:0 20px 50px -20px rgba(13,27,22,.38);
+  --tap:46px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --brand:#48a383; --brand-700:#55b291; --brand-50:#12291f; --brand-100:#1a3a2c;
+    --gold:#e8b54a; --gold-50:#2a2110;
+    --ink:#e6f0ea; --ink-2:#a8bdb2; --ink-3:#789084;
+    --line:#22352c; --bg:#0a1310; --card:#10201a;
+    --ok-bg:#0f2e1e; --warn-bg:#33240f; --bad-bg:#381815; --info-bg:#132548;
+    --eve-bg:#1e1a3a;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px -16px rgba(0,0,0,.85);
+    --shadow-lg:0 24px 56px -22px rgba(0,0,0,.9);
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--ink);direction:rtl;
+  font-family:"Noto Kufi Arabic",-apple-system,BlinkMacSystemFont,"Segoe UI",
+              "Noto Sans Arabic",Tahoma,sans-serif;
+  font-size:15px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:none;
+}
+h1,h2,h3,p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer;font-family:inherit}
+.hide{display:none !important}
+/* ژمارەکان هەمیشە بە ڕیزبەندی لاتینی دەخوێنرێنەوە */
+.ltr{direction:ltr;unicode-bidi:isolate}
+
+/* ---------- چوارچێوەی ئەپ ---------- */
+#app{max-width:780px;margin:0 auto;padding:0 0 100px;min-height:100vh}
+.appbar{
+  position:sticky;top:0;z-index:40;
+  background:linear-gradient(135deg,var(--brand) 0%,var(--brand-700) 100%);
+  color:#fff;
+  padding:calc(env(safe-area-inset-top) + 11px) 14px 13px;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 2px 18px rgba(13,27,22,.22);
+}
+.appbar .brand{width:38px;height:38px;border-radius:12px;background:var(--gold);
+  display:grid;place-items:center;flex:0 0 auto;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+.appbar .brand svg{width:23px;height:23px;display:block}
+.appbar .tt{flex:1;min-width:0}
+.appbar .tt b{display:block;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appbar .tt span{display:block;font-size:11.5px;color:#bcd9c9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iconbtn{min-width:38px;height:38px;padding:0 10px;border-radius:12px;display:grid;place-items:center;
+  color:#fff;background:rgba(255,255,255,.14);font-size:12px;font-weight:600;flex:0 0 auto}
+.iconbtn:active{transform:scale(.94)}
+.iconbtn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{padding:16px 14px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);padding:17px;margin-bottom:14px}
+.card.tight{padding:13px}
+.sec-t{font-size:12px;font-weight:700;letter-spacing:.02em;
+  color:var(--ink-3);margin:20px 3px 10px}
+
+/* ---------- دوگمەکان ---------- */
+.btn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:var(--tap);padding:0 20px;border-radius:14px;
+  background:var(--brand);color:#fff;font-weight:600;font-size:15px;
+  transition:transform .08s,filter .15s;width:100%;
+  box-shadow:0 2px 8px -2px rgba(17,87,64,.4);
+}
+.btn:active{transform:scale(.985)}
+.btn.sec{background:var(--brand-50);color:var(--brand);box-shadow:none}
+.btn.ghost{background:transparent;color:var(--brand);border:1.5px solid var(--line);box-shadow:none}
+.btn.gold{background:var(--gold);color:#3d2c02;box-shadow:0 2px 8px -2px rgba(224,165,38,.5)}
+.btn.danger{background:var(--bad);color:#fff}
+.btn.sm{min-height:38px;font-size:13.5px;padding:0 14px;border-radius:11px;width:auto}
+.btn[disabled],.btn.busy{opacity:.62;pointer-events:none}
+.btn.busy .lbl{opacity:.35}
+.btn.busy::after{
+  content:"";position:absolute;width:17px;height:17px;border-radius:50%;
+  border:2.2px solid currentColor;border-top-color:transparent;animation:spin .6s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.row{display:flex;gap:9px;flex-wrap:wrap}
+.row>.btn{width:auto;flex:1}
+
+/* ---------- خانەکانی نووسین ---------- */
+label.f{display:block;margin-bottom:13px}
+label.f .lb{display:block;font-size:12.5px;font-weight:600;color:var(--ink-2);margin:0 3px 6px}
+input,select,textarea{
+  width:100%;min-height:var(--tap);padding:11px 13px;border-radius:13px;
+  border:1.5px solid var(--line);background:var(--card);outline:none;
+  transition:border-color .15s,box-shadow .15s;font-family:inherit;
+}
+textarea{min-height:120px;resize:vertical;line-height:1.7}
+input:focus,select:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3.5px var(--brand-50)}
+.code-in{text-align:center;font-size:23px;font-weight:700;letter-spacing:.22em;
+  font-family:ui-monospace,Menlo,Consolas,monospace;min-height:58px;direction:ltr}
+
+/* ---------- چوونەژوورەوە ---------- */
+.hero{padding:36px 14px 8px;text-align:center}
+.hero .logo{width:84px;height:84px;margin:0 auto 16px;border-radius:25px;
+  background:linear-gradient(140deg,var(--brand) 0%,var(--brand-700) 100%);
+  display:grid;place-items:center;box-shadow:0 14px 34px -12px rgba(17,87,64,.6)}
+.hero .logo svg{width:48px;height:48px;display:block}
+.hero h1{font-size:21px;font-weight:700}
+.hero p{color:var(--ink-2);font-size:13.5px;margin-top:6px}
+.seg{display:flex;background:var(--brand-50);border-radius:14px;padding:4px;gap:4px;margin-bottom:15px}
+.seg button{flex:1;min-height:41px;border-radius:11px;font-size:14px;font-weight:600;color:var(--brand)}
+.seg button.on{background:var(--card);box-shadow:0 1px 5px rgba(13,27,22,.14)}
+.link{color:var(--brand);font-weight:600;font-size:13.5px;text-decoration:none;display:inline-block;padding:9px 4px}
+
+/* ---------- لیستەکان / کارتی وانە ---------- */
+.mod{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);
+  border-radius:15px;background:var(--card);margin-bottom:10px;box-shadow:0 1px 2px rgba(13,27,22,.03)}
+.mod .dot{width:44px;height:44px;border-radius:13px;background:var(--brand-50);color:var(--brand);
+  display:grid;place-items:center;font-weight:700;font-size:12px;flex:0 0 auto;direction:ltr}
+.mod .dot.eve{background:var(--eve-bg);color:var(--eve)}
+.mod .m{flex:1;min-width:0}
+.mod .m b{display:block;font-size:14.5px;font-weight:600;line-height:1.45}
+.mod .m span{display:block;font-size:12px;color:var(--ink-3);margin-top:2px}
+.mod .acts{display:flex;gap:7px;flex:0 0 auto}
+
+.slot{display:flex;align-items:center;gap:11px;padding:12px 13px;border-radius:14px;
+  background:var(--card);border:1px solid var(--line);margin-bottom:9px}
+.slot.now{border-color:var(--gold);box-shadow:0 0 0 3px rgba(224,165,38,.18)}
+.slot .time{font-size:11.5px;font-weight:700;color:var(--brand);background:var(--brand-50);
+  padding:7px 9px;border-radius:10px;text-align:center;line-height:1.3;flex:0 0 auto;min-width:58px;direction:ltr}
+.slot .time.eve{color:var(--eve);background:var(--eve-bg)}
+.slot .s{flex:1;min-width:0}
+.slot .s b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slot .s span{font-size:11.5px;color:var(--ink-3)}
+
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;
+  font-size:11px;font-weight:700}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.warn1,.pill.warn2{background:var(--warn-bg);color:var(--warn)}
+.pill.final,.pill.deprived{background:var(--bad-bg);color:var(--bad)}
+.pill.info{background:var(--info-bg);color:var(--info)}
+.pill.gray{background:var(--brand-50);color:var(--ink-2)}
+.pill.morn{background:var(--gold-50);color:var(--gold-dk)}
+.pill.eve{background:var(--eve-bg);color:var(--eve)}
+
+/* ---------- لیستی خوێندکاران ---------- */
+.rosterbar{position:sticky;top:62px;z-index:30;background:var(--bg);padding:10px 14px 8px;
+  border-bottom:1px solid var(--line)}
+.sum{display:flex;gap:8px;margin-bottom:9px}
+.sum div{flex:1;text-align:center;background:var(--card);border:1px solid var(--line);
+  border-radius:13px;padding:9px 4px}
+.sum b{display:block;font-size:19px;font-weight:700;line-height:1.1}
+.sum span{font-size:10.5px;color:var(--ink-3)}
+.sum .a b{color:var(--bad)} .sum .p b{color:var(--ok)} .sum .e b{color:var(--info)}
+
+.hhead{display:flex;align-items:center;gap:8px;padding:7px 14px 5px;font-size:11px;
+  color:var(--ink-3);font-weight:700}
+.hhead .sp{flex:1}
+.hhead button{width:38px;height:27px;border-radius:9px;background:var(--brand-50);color:var(--brand);
+  font-size:11px;font-weight:700;direction:ltr}
+
+.stu{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--line);
+  background:var(--card)}
+.stu:first-of-type{border-top:1px solid var(--line)}
+.stu .n{flex:1;min-width:0}
+.stu .n b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stu .n span{font-size:11px;color:var(--ink-3)}
+.stu .cells{display:flex;gap:5px;flex:0 0 auto}
+.hr{width:38px;height:38px;border-radius:11px;font-size:13px;font-weight:700;
+  display:grid;place-items:center;transition:transform .08s;
+  background:var(--ok-bg);color:var(--ok);border:1.5px solid transparent;direction:ltr}
+.hr:active{transform:scale(.9)}
+.hr[data-m="A"]{background:var(--bad);color:#fff}
+.hr[data-m="E"]{background:var(--info);color:#fff}
+.hr[data-m="L"]{background:var(--gold);color:#3d2c02}
+.stu.flagged{background:linear-gradient(-90deg,var(--bad-bg),var(--card) 55%)}
+.stu.locked{background:linear-gradient(-90deg,var(--info-bg),var(--card) 55%)}
+.stu.locked .hr{opacity:.75;cursor:not-allowed}
+.stu.locked .hr:active{transform:none}
+
+.footbar{position:fixed;left:0;right:0;bottom:0;z-index:45;
+  background:var(--card);
+  border-top:1px solid var(--line);
+  box-shadow:0 -6px 22px -14px rgba(13,27,22,.4);
+  padding:10px 14px calc(env(safe-area-inset-bottom) + 10px)}
+.footbar .inner{max-width:780px;margin:0 auto;display:flex;gap:9px;align-items:center}
+.saved{font-size:11px;color:var(--ink-3);text-align:center;padding-top:6px}
+
+/* ---------- خشتەکان ---------- */
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -17px;padding:0 17px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:start;font-size:11px;color:var(--ink-3);font-weight:700;
+  padding:9px 8px;border-bottom:1.5px solid var(--line);white-space:nowrap}
+td{padding:11px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.num{text-align:end;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap;direction:ltr}
+tbody tr:active{background:var(--brand-50)}
+.bar{height:5px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:5px;min-width:54px}
+.bar i{display:block;height:100%;border-radius:3px;background:var(--ok)}
+.bar.warn1 i,.bar.warn2 i{background:var(--warn)}
+.bar.final i,.bar.deprived i{background:var(--bad)}
+
+/* ---------- تابەکان ---------- */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{white-space:nowrap;padding:9px 15px;border-radius:12px;font-size:13.5px;
+  font-weight:600;background:var(--card);border:1px solid var(--line);color:var(--ink-2)}
+.tabs button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+/* ---------- پەنجەرەی خوارەوە ---------- */
+.sheet{position:fixed;inset:0;z-index:70;display:none}
+.sheet.show{display:block}
+.sheet .scrim{position:absolute;inset:0;background:rgba(6,18,13,.52);backdrop-filter:blur(3px)}
+.sheet .panel{position:absolute;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;
+  background:var(--card);border-radius:24px 24px 0 0;padding:8px 17px calc(env(safe-area-inset-bottom) + 18px);
+  max-width:780px;margin:0 auto;animation:up .22s cubic-bezier(.2,.8,.3,1);box-shadow:var(--shadow-lg)}
+@keyframes up{from{transform:translateY(16px);opacity:.6}}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:8px auto 15px}
+.sheet h3{font-size:17px;font-weight:700;margin-bottom:5px}
+.sheet .sub{font-size:12.5px;color:var(--ink-3);margin-bottom:16px}
+
+/* ---------- چاوەڕوانی / پەیام ---------- */
+#bar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--gold);z-index:100;
+  transition:width .2s ease,opacity .3s;box-shadow:0 0 10px var(--gold)}
+#busy{position:fixed;inset:0;z-index:95;display:none;place-items:center;
+  background:rgba(6,18,13,.36);backdrop-filter:blur(2px)}
+#busy.show{display:grid}
+#busy .b{background:var(--card);border-radius:19px;padding:23px 27px;text-align:center;
+  box-shadow:var(--shadow-lg);min-width:172px}
+#busy .ring{width:34px;height:34px;margin:0 auto 12px;border-radius:50%;
+  border:3px solid var(--brand-50);border-top-color:var(--brand);animation:spin .65s linear infinite}
+#busy b{display:block;font-size:14px;font-weight:600}
+#busy span{display:block;font-size:11.5px;color:var(--ink-3);margin-top:3px}
+#toast{position:fixed;left:50%;transform:translate(-50%,24px);bottom:94px;z-index:98;
+  background:var(--ink);color:#fff;padding:12px 19px;border-radius:14px;font-size:13.5px;
+  font-weight:500;opacity:0;pointer-events:none;transition:.25s;max-width:92vw;text-align:center;
+  box-shadow:0 16px 36px -12px rgba(0,0,0,.55)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.err{background:var(--bad)} #toast.good{background:var(--ok)}
+#net{position:fixed;top:0;left:0;right:0;z-index:99;background:var(--warn);color:#fff;
+  font-size:12px;font-weight:600;text-align:center;padding:6px;display:none}
+#net.show{display:block}
+
+/* ---------- پاڵاوتن ---------- */
+.filters{border:1px solid var(--line);border-radius:13px;padding:0 13px;margin-bottom:12px;background:var(--card)}
+.filters summary{list-style:none;cursor:pointer;padding:12px 2px;font-size:13.5px;font-weight:600;color:var(--brand)}
+.filters summary::-webkit-details-marker{display:none}
+.filters summary::after{content:"▾";float:inline-end;color:var(--ink-3)}
+.filters[open] summary::after{content:"▴"}
+.filters .frow{display:flex;gap:9px;flex-wrap:wrap;padding-top:4px}
+.filters .frow .f{flex:1;min-width:120px}
+.filters .row{padding-bottom:12px}
+
+.empty{text-align:center;padding:36px 16px;color:var(--ink-3)}
+.empty b{display:block;font-size:15px;color:var(--ink-2);margin-bottom:5px}
+.muted{color:var(--ink-3);font-size:12.5px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.kv:last-child{border-bottom:0}
+.kv b{font-weight:600;font-variant-numeric:tabular-nums}
+.note{background:var(--brand-50);border:1px solid var(--brand-100);border-radius:13px;
+  padding:12px 14px;font-size:12.5px;color:var(--ink-2);line-height:1.85;margin-bottom:13px}
+</style>
+</head>
+<body>
+
+<div id="net">بێ ئینتەرنێت — کارەکەت لەم ئامێرە پاشەکەوت کراوە</div>
+<div id="bar"></div>
+
+<div id="app">
+  <!-- ============ سەری ئەپ ============ -->
+  <header class="appbar" id="appbar">
+    <button class="iconbtn hide" id="backBtn" aria-label="گەڕانەوە">
+      <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <div class="brand">
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="12" r="6" fill="#115740"/>
+        <circle cx="11" cy="19" r="4.6" fill="#115740" opacity=".72"/>
+        <circle cx="37" cy="19" r="4.6" fill="#115740" opacity=".72"/>
+        <path d="M24 21c-6.2 0-10.5 3.9-10.5 9.2V38h21v-7.8C34.5 24.9 30.2 21 24 21z" fill="#115740"/>
+        <path d="M11 25c-4.2 0-7 2.6-7 6.3V38h6.8v-7.8c0-1.9.5-3.6 1.4-5.1A9 9 0 0011 25z" fill="#115740" opacity=".6"/>
+        <path d="M37 25c4.2 0 7 2.6 7 6.3V38h-6.8v-7.8c0-1.9-.5-3.6-1.4-5.1A9 9 0 0137 25z" fill="#115740" opacity=".6"/>
+      </svg>
+    </div>
+    <div class="tt"><b id="barTitle">ئامادەبوون</b><span id="barSub">بەشی کاری کۆمەڵایەتی</span></div>
+    <button class="iconbtn hide" id="shiftBtn">هەموو</button>
+    <button class="iconbtn hide" id="outBtn" aria-label="چوونەدەرەوە">
+      <svg viewBox="0 0 24 24"><path d="M15 21h4a2 2 0 002-2V5a2 2 0 00-2-2h-4M8 17l-5-5 5-5M3 12h12"/></svg>
+    </button>
+  </header>
+
+  <!-- ============ چوونەژوورەوە ============ -->
+  <section id="v-login">
+    <div class="hero">
+      <div class="logo">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <circle cx="24" cy="12" r="6" fill="#e0a526"/>
+          <circle cx="11" cy="19" r="4.6" fill="#ffffff" opacity=".82"/>
+          <circle cx="37" cy="19" r="4.6" fill="#ffffff" opacity=".82"/>
+          <path d="M24 21c-6.2 0-10.5 3.9-10.5 9.2V38h21v-7.8C34.5 24.9 30.2 21 24 21z" fill="#e0a526"/>
+          <path d="M11 25c-4.2 0-7 2.6-7 6.3V38h6.8v-7.8c0-1.9.5-3.6 1.4-5.1A9 9 0 0011 25z" fill="#ffffff" opacity=".7"/>
+          <path d="M37 25c4.2 0 7 2.6 7 6.3V38h-6.8v-7.8c0-1.9-.5-3.6-1.4-5.1A9 9 0 0137 25z" fill="#ffffff" opacity=".7"/>
+        </svg>
+      </div>
+      <h1>پۆرتاڵی ئامادەبوون</h1>
+      <p>بەشی کاری کۆمەڵایەتی · زانکۆی ڕاپەڕین</p>
+      <p class="muted" style="margin-top:3px">شیفتی بەیانی و ئێوارە</p>
+    </div>
+    <div class="wrap">
+      <div class="card" id="stepCode">
+        <div class="seg">
+          <button id="segT" class="on">مامۆستا</button>
+          <button id="segA">بەڕێوەبەر</button>
+        </div>
+        <label class="f">
+          <span class="lb">کۆدی چوونەژوورەوە یان ئیمەیڵی زانکۆ</span>
+          <input id="inCode" class="code-in" autocomplete="username"
+                 autocapitalize="characters" spellcheck="false" placeholder="SW••••••">
+        </label>
+        <button class="btn" id="loginBtn"><span class="lbl">چوونەژوورەوە</span></button>
+        <p class="muted" style="text-align:center;margin-top:11px">
+          بە ئیمەیڵ، کۆدێکی یەکجارەیی بۆ ئەو ئیمەیڵە دەنێرین.</p>
+        <div style="text-align:center">
+          <a href="#" class="link" id="forgotLink">کۆدەکەم لەبیرچووە</a>
+        </div>
+      </div>
+
+      <div class="card hide" id="stepPin">
+        <h2 style="font-size:17px;font-weight:700;margin-bottom:5px">ئیمەیڵەکەت بپشکنە</h2>
+        <p class="muted" style="margin-bottom:16px">کۆدێکی ٦ ژمارەیی نێردرا بۆ
+          <b id="pinTo" style="display:block;margin-top:4px;color:var(--ink);direction:ltr"></b></p>
+        <label class="f">
+          <span class="lb">کۆدی چوونەژوورەوە</span>
+          <input id="inPin" class="code-in" type="text" inputmode="numeric"
+                 autocomplete="one-time-code" maxlength="6" placeholder="••••••">
+        </label>
+        <button class="btn" id="pinBtn"><span class="lbl">بەردەوامبە</span></button>
+        <div class="row" style="margin-top:10px">
+          <button class="btn ghost sm" id="pinBack" style="flex:1"><span class="lbl">گەڕانەوە</span></button>
+          <button class="btn ghost sm" id="pinResend" style="flex:1"><span class="lbl">دووبارە بنێرە</span></button>
+        </div>
+      </div>
+
+      <button class="btn sec" id="installBtn" style="margin-bottom:12px">
+        <span class="lbl">دابەزاندنی ئەپ</span></button>
+      <p class="muted" style="text-align:center;padding:0 10px 22px">
+        ئامۆژگاری: «زیادکردن بۆ شاشەی سەرەکی» بەکاربهێنە تا وەک ئەپ دابمەزرێت —
+        ئینجا بەبێ ئینتەرنێتیش لەناو پۆل کاردەکات.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ شاشەی سەرەکی مامۆستا ============ -->
+  <section id="v-home" class="hide">
+    <div class="wrap">
+      <div class="card tight" id="todayCard">
+        <div class="sec-t" style="margin:4px 3px 10px">وانەکانی ئەمڕۆ<span id="todayDay" class="muted" style="font-weight:400"></span></div>
+        <div id="todaySlots"></div>
+      </div>
+      <div class="sec-t">وانەکانم</div>
+      <div id="moduleList"></div>
+      <div id="adminEntry" class="hide" style="margin-top:8px">
+        <button class="btn sec" id="toAdminBtn"><span class="lbl">پانێڵی بەڕێوەبەر</span></button>
+      </div>
+      <div id="pendingBox" class="hide card" style="border-color:var(--warn)">
+        <b style="font-size:14px">چاوەڕێی ناردنە</b>
+        <p class="muted" id="pendingTxt" style="margin-top:5px"></p>
+        <button class="btn sm sec" id="syncBtn" style="margin-top:11px;width:100%">
+          <span class="lbl">ئێستا بنێرە</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ لیستی ئامادەبوون ============ -->
+  <section id="v-roster" class="hide">
+    <div class="rosterbar">
+      <div class="sum">
+        <div class="p"><b id="cPresent">0</b><span>ئامادە</span></div>
+        <div class="a"><b id="cAbsent">0</b><span>نائامادە</span></div>
+        <div class="e"><b id="cExcused">0</b><span>مۆڵەت</span></div>
+      </div>
+      <div class="row" style="margin-bottom:8px;gap:7px">
+        <button class="btn sm sec" id="allPresentBtn" style="flex:0 0 auto;white-space:nowrap">
+          <span class="lbl">هەموو ئامادەن</span></button>
+        <input id="search" type="search" placeholder="گەڕان بۆ خوێندکار…"
+               style="min-height:38px;flex:1;width:auto;border-radius:11px">
+      </div>
+    </div>
+    <div class="hhead" id="hourHead"></div>
+    <div id="rosterBody"></div>
+    <div class="wrap">
+      <p class="muted" style="text-align:center;padding:12px 0 2px">
+        دەست لە کاتژمێرێک بدە بۆ گۆڕین: ئامادە → نائامادە → مۆڵەت → درەنگ</p>
+      <p class="muted" style="text-align:center;padding:0 0 4px">
+        هەر خوێندکارێک نەگۆڕیت، ئامادە دەمێنێتەوە.</p>
+    </div>
+    <div class="footbar">
+      <div class="inner">
+        <button class="btn ghost" id="draftBtn" style="flex:0 0 auto;width:auto;padding:0 17px">
+          <span class="lbl">پاشەکەوت</span></button>
+        <button class="btn gold" id="finalBtn"><span class="lbl">کۆتایی و ناردن</span></button>
+      </div>
+      <div class="saved" id="savedNote"></div>
+    </div>
+  </section>
+
+  <!-- ============ تۆمارەکانی مامۆستا ============ -->
+  <section id="v-records" class="hide">
+    <div class="wrap">
+      <div class="tabs" id="recTabs"></div>
+      <div class="card tight">
+        <div class="tabs" style="padding:0 0 10px">
+          <button class="on" data-rec="students">خوێندکاران</button>
+          <button data-rec="late">درەنگ</button>
+          <button data-rec="excused">مۆڵەت</button>
+          <button data-rec="sessions">دانیشتنەکان</button>
+        </div>
+        <details class="filters" id="recFilters">
+          <summary>پاڵاوتن</summary>
+          <div class="frow">
+            <label class="f"><span class="lb">نائامادەبوون لانیکەم</span>
+              <select id="fPct">
+                <option value="">بێ پاڵاوتن</option>
+                <option value="5">≥ ٥٪</option>
+                <option value="7.5">≥ ٧٫٥٪</option>
+                <option value="10">≥ ١٠٪</option>
+                <option value="over10">زیاتر لە ١٠٪</option>
+              </select></label>
+            <label class="f"><span class="lb">لە بەرواری</span>
+              <input type="date" id="fFrom"></label>
+            <label class="f"><span class="lb">بۆ بەرواری</span>
+              <input type="date" id="fTo"></label>
+          </div>
+          <div class="row">
+            <button class="btn sm ghost" id="fClear" style="flex:1"><span class="lbl">سڕینەوە</span></button>
+            <button class="btn sm" id="fApply" style="flex:2"><span class="lbl">جێبەجێکردن</span></button>
+          </div>
+        </details>
+        <div id="recBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ بەڕێوەبەر ============ -->
+  <section id="v-admin" class="hide">
+    <div class="wrap">
+      <div class="tabs" id="admTabs">
+        <button class="on" data-adm="report">ڕاپۆرت</button>
+        <button data-adm="audit">پشکنینی ڕۆژانە</button>
+        <button data-adm="permit">مۆڵەتەکان</button>
+        <button data-adm="teachers">مامۆستایان</button>
+        <button data-adm="students">خوێندکاران</button>
+        <button data-adm="settings">ڕێکخستن</button>
+      </div>
+      <div id="admBody"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ ڕووپۆشەکان ============ -->
+<div id="busy"><div class="b"><div class="ring"></div>
+  <b id="busyT">تکایە چاوەڕێ بکە…</b><span id="busyS"></span></div></div>
+<div id="toast"></div>
+
+<div class="sheet" id="sheet">
+  <div class="scrim" data-close></div>
+  <div class="panel"><div class="grab"></div><div id="sheetBody"></div></div>
+</div>
+
+<script>
+/* ======================================================================
+   ئامادەبوون — بەشی کاری کۆمەڵایەتی · زانکۆی ڕاپەڕین
+   یەک فایل، بەبێ کتێبخانەی دەرەکی. هەموو ئەپەکە لێرەیە.
+   ====================================================================== */
+
+/* ------------------------------------------------------------ دەقەکان */
+const SHIFT_KU = { M:'بەیانی', E:'ئێوارە' };
+const SHIFT_SHORT = { M:'ب', E:'ئ' };
+const STAGE_KU = { '1':'یەکەم', '2':'دووەم', '3':'سێیەم', '4':'چوارەم' };
+
+/* ------------------------------------------------------------ یارمەتی */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+const yearTxt = y => {
+  const n = String(y == null ? '' : y).replace(/\D/g, '');
+  return STAGE_KU[n] ? 'قۆناغی ' + STAGE_KU[n] : (n ? 'قۆناغی ' + n : '');
+};
+const shiftTxt = s => SHIFT_KU[s] || '';
+
+function scopeTxt(sc, year, shift){
+  if (sc !== 'ALL') return 'گروپی ' + sc;
+  const g = (S.boot && S.boot.groups && S.boot.groups[year + '|' + shift]) || [];
+  return g.length > 1 ? 'گروپی ' + g.join(' + ') : 'هەموو خوێندکاران';
+}
+const esc = s => String(s == null ? '' : s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+/* ڕێژەی چاوەڕوانی + ڕووپۆشی «چاوەڕێ بکە» — هەموو کردارێک ئەمانە بەکاردەهێنێت */
+let busyDepth = 0;
+function busyOn(msg, sub){
+  busyDepth++;
+  $('#busyT').textContent = msg || 'تکایە چاوەڕێ بکە…';
+  $('#busyS').textContent = sub || '';
+  $('#busy').classList.add('show');
+  const b = $('#bar'); b.style.opacity = 1; b.style.width = '28%';
+  setTimeout(() => { if (busyDepth) b.style.width = '72%'; }, 220);
+}
+function busyOff(){
+  busyDepth = Math.max(0, busyDepth - 1);
+  if (busyDepth) return;
+  $('#busy').classList.remove('show');
+  const b = $('#bar'); b.style.width = '100%';
+  setTimeout(() => { b.style.opacity = 0; b.style.width = '0'; }, 260);
+}
+/** هەر کلیکێک کە کار دەکات: سپینەری دوگمە + ڕووپۆشی چاوەڕوانی. */
+async function run(btn, fn, msg, sub){
+  if (btn){ btn.classList.add('busy'); btn.disabled = true; }
+  busyOn(msg, sub);
+  try { return await fn(); }
+  catch(err){ toast(err.message || String(err), 'err'); return null; }
+  finally {
+    busyOff();
+    if (btn){ btn.classList.remove('busy'); btn.disabled = false; }
+  }
+}
+let toastTimer;
+function toast(msg, kind){
+  const el = $('#toast');
+  el.textContent = msg; el.className = 'show ' + (kind || '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, kind === 'err' ? 4200 : 2600);
+}
+
+/* ---------------------------------------------------------------- دۆخ */
+const S = {
+  code:'', role:'', boot:null, view:'login', mode:'teacher',
+  session:null, marks:{}, roster:[], dirty:false, draftTimer:null,
+  recModule:'', recTab:'students', admTab:'report', adm:null,
+  shiftFilter:''        // '' = هەموو شیفتەکان، 'M' = بەیانی، 'E' = ئێوارە
+};
+const LS = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+  del(k){ try { localStorage.removeItem(k); } catch(e){} }
+};
+
+/* ---------------------------------------------------------------- API */
+const CFG = window.UOR_CONFIG || { API_URL:'', APP_KEY:'' };
+
+async function api(action, payload, timeout){
+  const ctl = new AbortController();
+  const to = setTimeout(() => ctl.abort(), timeout || 25000);
+  try {
+    const r = await fetch(CFG.API_URL, {
+      method:'POST', signal: ctl.signal, redirect:'follow',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action, key: CFG.APP_KEY, payload: payload || {} })
+    });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'هەڵەی سێرڤەر');
+    return j.data;
+  } finally { clearTimeout(to); }
+}
+
+/* ------------------------------------------------------------ ڕێڕەوەکان */
+function show(view, title, sub){
+  S.view = view;
+  ['login','home','roster','records','admin'].forEach(v =>
+    $('#v-' + v).classList.toggle('hide', v !== view));
+  $('#barTitle').textContent = title || 'ئامادەبوون';
+  $('#barSub').textContent = sub || (S.boot ? S.boot.settings.dept : 'بەشی کاری کۆمەڵایەتی');
+  $('#backBtn').classList.toggle('hide', view === 'login' || view === 'home');
+  $('#outBtn').classList.toggle('hide', view === 'login');
+  const bothShifts = !!(S.boot && S.boot.shifts && S.boot.shifts.length > 1);
+  $('#shiftBtn').classList.toggle('hide', !(view === 'home' && bothShifts));
+  const fb = $('.footbar'); if (fb) fb.classList.toggle('hide', view !== 'roster');
+  window.scrollTo(0, 0);
+}
+$('#backBtn').onclick = () => {
+  if (S.view === 'roster' && S.dirty) saveDraft(true);
+  if (S.view === 'admin' || S.view === 'records' || S.view === 'roster') renderHome();
+};
+$('#outBtn').onclick = () => {
+  LS.del('code'); LS.del('boot'); S.code = ''; S.boot = null;
+  $('#inCode').value = '';
+  $('#stepPin').classList.add('hide'); $('#stepCode').classList.remove('hide');
+  show('login');
+};
+
+/* دوگمەی شیفت: هەموو → بەیانی → ئێوارە → هەموو */
+$('#shiftBtn').onclick = () => {
+  const order = ['', 'M', 'E'];
+  S.shiftFilter = order[(order.indexOf(S.shiftFilter) + 1) % 3];
+  LS.set('shiftFilter', S.shiftFilter);
+  renderHome();
+};
+function shiftBtnLabel(){
+  $('#shiftBtn').textContent = S.shiftFilter ? SHIFT_KU[S.shiftFilter] : 'هەموو';
+}
+
+/* ------------------------------------------------------- چوونەژوورەوە */
+$('#segT').onclick = () => { S.mode = 'teacher'; $('#segT').classList.add('on'); $('#segA').classList.remove('on'); };
+$('#segA').onclick = () => { S.mode = 'admin';   $('#segA').classList.add('on'); $('#segT').classList.remove('on'); };
+
+/* ئیمەیڵی ڕاستەقینە، نەک تەنها شتێک کە @ تێدایە — کۆدێک لەوانەیە @ تێدابێت
+   و پێویستە هەر وەک کۆد مامەڵەی لەگەڵ بکرێت. */
+const isEmail = v => /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(String(v).trim());
+
+$('#inCode').addEventListener('input', e => {
+  e.target.classList.toggle('code-in', !isEmail(e.target.value));
+});
+
+$('#loginBtn').onclick = e => run(e.currentTarget, async () => {
+  const v = $('#inCode').value.trim();
+  if (!v) { toast('کۆد یان ئیمەیڵ بنووسە', 'err'); return; }
+
+  if (isEmail(v)) {                               // ئیمەیڵ → کۆدی یەکجارەیی
+    const r = await api('requestPin', { email: v });
+    S.pinEmail = v.toLowerCase();
+    $('#pinTo').textContent = S.pinEmail;
+    $('#inPin').value = '';
+    $('#stepCode').classList.add('hide');
+    $('#stepPin').classList.remove('hide');
+    toast(r.message, 'good');
+    setTimeout(() => $('#inPin').focus(), 120);
+    return;
+  }
+
+  const res = await api('login', { code: v, mode: S.mode });
+  await enterApp(v, res);
+}, 'چوونەژوورەوە…');
+
+$('#pinBtn').onclick = e => run(e.currentTarget, async () => {
+  const pin = $('#inPin').value.trim();
+  if (pin.length < 4) { toast('کۆدی چوونەژوورەوە بنووسە', 'err'); return; }
+  const res = await api('verifyPin', { email: S.pinEmail, pin });
+  $('#stepPin').classList.add('hide');
+  $('#stepCode').classList.remove('hide');
+  await enterApp(res.code, res);
+}, 'پشکنین…');
+
+$('#pinResend').onclick = e => run(e.currentTarget, async () => {
+  const r = await api('requestPin', { email: S.pinEmail });
+  toast(r.message, 'good');
+}, 'ناردنی کۆد…');
+
+$('#pinBack').onclick = () => {
+  $('#stepPin').classList.add('hide');
+  $('#stepCode').classList.remove('hide');
+};
+
+/** هاوبەش لە نێوان هەردوو ڕێگەی چوونەژوورەوە. */
+async function enterApp(code, res){
+  S.code = code; S.role = res.role;
+  LS.set('code', code);
+  const wantsAdmin = (S.mode === 'admin') && (res.role === 'admin' || res.role === 'head');
+  if (res.isTeacher && !wantsAdmin) await loadBoot(true);
+  else await loadAdmin();
+}
+
+$('#inCode').addEventListener('keydown', e => { if (e.key === 'Enter') $('#loginBtn').click(); });
+$('#inPin').addEventListener('keydown',  e => { if (e.key === 'Enter') $('#pinBtn').click(); });
+
+$('#forgotLink').onclick = e => {
+  e.preventDefault();
+  openSheet(`
+    <h3>گەڕاندنەوەی کۆد</h3>
+    <p class="sub">ئیمەیڵی تۆمارکراوت بنووسە، کۆدەکەت دووبارە بۆت دەنێردرێت.</p>
+    <label class="f"><span class="lb">ئیمەیڵ</span>
+      <input id="recEmail" type="email" inputmode="email" dir="ltr" placeholder="name@uor.edu.krd"></label>
+    <button class="btn" id="recBtn"><span class="lbl">ناردن</span></button>`);
+  $('#recBtn').onclick = ev => run(ev.currentTarget, async () => {
+    const email = $('#recEmail').value.trim();
+    const r = await api('recoverCode', { email });
+    closeSheet(); toast(r.message || 'ئەگەر ئەو ئیمەیڵە تۆمارکرابێت، کۆدەکە نێردرا.', 'good');
+  }, 'ناردن…');
+};
+
+/* ------------------------------------------------------ بارکردنی داتا */
+async function loadBoot(fresh){
+  const cached = LS.get('boot');
+  if (cached && !fresh){ S.boot = cached; renderHome(); }
+  const data = await api('bootstrap', { code: S.code });
+  S.boot = data; LS.set('boot', data);
+  renderHome();
+  flushPending();
+}
+
+/* -------------------------------------------------- شاشەی سەرەکی */
+function renderHome(){
+  const b = S.boot; if (!b) return;
+  shiftBtnLabel();
+  show('home', b.teacher.name, b.settings.term);
+  $('#todayDay').textContent = b.today.day ? ' · ' + b.today.day : '';
+
+  const keep = m => !S.shiftFilter || m.shift === S.shiftFilter;
+  const mById = {}; b.modules.forEach(m => { mById[m.id] = m; });
+
+  /* ---- وانەکانی ئەمڕۆ ---- */
+  const nowHM = new Date().toTimeString().slice(0,5);
+  const slots = (b.today.slots || []).filter(s => {
+    const m = mById[s.module];
+    return m ? keep(m) : true;
+  });
+  $('#todaySlots').innerHTML = slots.length ? slots.map(s => {
+    const m = mById[s.module] || { name: s.module, nameKu: s.module, shift: s.shift };
+    const sh = m.shift || s.shift || 'M';
+    const live = nowHM >= s.start && nowHM <= s.end;
+    const sid = [b.today.date, sh, s.module, s.scope, s.start.replace(':','')].join('_');
+    const done = (b.sessions || []).some(x => x.id === sid && x.status === 'final');
+    return `<div class="slot ${live?'now':''}">
+      <div class="time ${sh==='E'?'eve':''}">${esc(s.start)}<br>${esc(s.end)}</div>
+      <div class="s"><b>${esc(m.nameKu || m.name)}</b>
+        <span>${[s.hours + ' کاتژمێر', shiftTxt(sh), scopeTxt(s.scope, s.year, sh), yearTxt(s.year)]
+                 .filter(Boolean).map(esc).join(' · ')}</span></div>
+      ${done ? `<span class="pill ok">نێردرا ✓</span>`
+             : `<button class="btn sm" data-take="${esc(s.module)}" data-scope="${esc(s.scope)}"
+                 data-hours="${s.hours}" data-start="${esc(s.start)}"><span class="lbl">تۆمارکردن</span></button>`}
+    </div>`;
+  }).join('') : `<p class="muted" style="padding:6px 2px">ئەمڕۆ هیچ وانەیەک نییە.</p>`;
+
+  /* ---- کارتی وانەکان، بەپێی شیفت ئینجا قۆناغ ---- */
+  const mine = b.modules.filter(keep);
+  const buckets = [];
+  mine.forEach(m => {
+    const k = m.shift + '|' + m.year;
+    if (buckets.indexOf(k) < 0) buckets.push(k);
+  });
+  /* قۆناغ بە ڕیزبەندی، و لە هەر قۆناغێکدا بەیانی پێش ئێوارە */
+  const rank = k => k.split('|')[1] + '|' + (k.charAt(0) === 'M' ? '0' : '1');
+  buckets.sort((a, b2) => rank(a).localeCompare(rank(b2)));
+  const several = buckets.length > 1;
+
+  $('#moduleList').innerHTML = buckets.length ? buckets.map(k => {
+    const parts = k.split('|'), sh = parts[0], yr = parts[1];
+    const head = several
+      ? `<div class="sec-t" style="margin:16px 3px 9px">${esc(yearTxt(yr))}
+           <span class="pill ${sh==='E'?'eve':'morn'}" style="margin-inline-start:6px">${esc(shiftTxt(sh))}</span>
+         </div>` : '';
+    return head + mine.filter(m => m.shift === sh && m.year === yr).map(m => `
+      <div class="mod">
+        <div class="dot ${sh==='E'?'eve':''}">${esc(m.id.replace(/-.*$/,'').slice(0,3))}</div>
+        <div class="m"><b>${esc(m.nameKu || m.name)}</b>
+          <span>${m.weekly} کاتژمێر/هەفتە · ${m.weekly*m.weeks} کاتژمێری پلاندراو${
+            several ? '' : ' · ' + esc(shiftTxt(sh))}</span></div>
+        <div class="acts">
+          <button class="btn sm sec" data-rec-open="${esc(m.id)}"><span class="lbl">تۆمارەکان</span></button>
+          <button class="btn sm" data-pick="${esc(m.id)}"><span class="lbl">تۆمارکردن</span></button>
+        </div>
+      </div>`).join('');
+  }).join('') : `<p class="muted" style="padding:6px 3px">هیچ وانەیەک بۆ ئەم پاڵاوتنە نییە.</p>`;
+
+  $('#adminEntry').classList.toggle('hide', !(b.teacher.role === 'admin' || b.teacher.role === 'head'));
+  renderPending();
+}
+
+$('#toAdminBtn').onclick = e => run(e.currentTarget, loadAdmin, 'بارکردن…');
+
+/* ---- کلیکەکانی شاشەی سەرەکی ---- */
+$('#v-home').addEventListener('click', e => {
+  const take = e.target.closest('[data-take]');
+  if (take) return run(take, () => openSession(take.dataset.take, take.dataset.scope,
+                    Number(take.dataset.hours), take.dataset.start), 'بارکردن…');
+  const pick = e.target.closest('[data-pick]');
+  if (pick) return chooseScope(pick.dataset.pick);
+  const rec = e.target.closest('[data-rec-open]');
+  if (rec) return run(rec, () => {
+    S.recModule = rec.dataset.recOpen; S.recTab = 'students'; return loadRecords();
+  }, 'بارکردن…');
+});
+
+/* ------------------------------------------- هەڵبژاردنی گروپ و بەروار */
+function chooseScope(moduleId){
+  const b = S.boot;
+  const m = b.modules.find(x => x.id === moduleId) || {};
+  const sh = m.shift || 'M';
+  const byScope = {};
+  b.schedule.filter(s => s.module === moduleId)
+            .forEach(s => { if (!byScope[s.scope]) byScope[s.scope] = s; });
+
+  /* ئەو گروپانەی لەم قۆناغ و شیفتەدا هەن */
+  const groups = (b.groups && b.groups[m.year + '|' + sh]) || ['A','B'];
+  const scopes = ['ALL'].concat(groups);
+
+  openSheet(`
+    <h3>${esc(m.nameKu || m.name)}</h3>
+    <p class="sub">${esc(yearTxt(m.year))} · ${esc(shiftTxt(sh))} · کێ لەم وانەیەدایە؟</p>
+    ${scopes.map(sc => {
+      const s = byScope[sc];
+      const hrs = s ? s.hours : (sc === 'ALL' ? (m.theory || m.weekly || 2) : (m.prac || 2));
+      const lbl = sc === 'ALL' ? 'هەموو خوێندکاران' : 'گروپی ' + sc;
+      return `<button class="btn ${sc==='ALL'?'':'sec'}" style="margin-bottom:9px"
+        data-go="${esc(moduleId)}" data-sc="${esc(sc)}" data-h="${hrs}" data-st="${s?esc(s.start):''}">
+        <span class="lbl">${esc(lbl)} · ${hrs} کاتژمێر</span></button>`;
+    }).join('')}
+    <label class="f" style="margin-top:12px"><span class="lb">بەروار</span>
+      <input type="date" id="sessDate" value="${todayISO()}" max="${todayISO()}"></label>
+    <p class="muted">بەروار بگۆڕە ئەگەر ئامادەبوونی ڕۆژێکی پێشوو تۆمار دەکەیت.</p>`);
+}
+
+function todayISO(){
+  const d = new Date();
+  return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+}
+
+/* -------------------------------------------------- لیستی ئامادەبوون */
+async function openSession(moduleId, scope, hours, start, date, force){
+  const data = await api('openSession', {
+    code: S.code, moduleId, scope, hours, start, date: date || S.boot.today.date
+  });
+
+  /* ئەم وانەیە پێشتر نێردراوە — پێش کردنەوەی دووبارە ئاگادار بکە */
+  if (data.alreadyTaken && !force){
+    openSheet(`
+      <h3>پێشتر تۆمارکراوە</h3>
+      <p class="sub">ئامادەبوونی ئەم وانەیە بۆ ئەم بەروارە نێردراوە.</p>
+      <div class="kv"><span>وانە</span><b>${esc(data.module)}</b></div>
+      <div class="kv"><span>شیفت</span><b>${esc(shiftTxt(data.shift))}</b></div>
+      <div class="kv"><span>بەروار</span><b class="ltr">${esc(data.date)}</b></div>
+      <div class="kv"><span>گروپ</span><b>${esc(scopeTxt(data.scope, data.year, data.shift))}</b></div>
+      <div class="kv"><span>تۆمارکراوە لەلایەن</span><b>${esc(data.takenBy || '—')}</b></div>
+      <div class="kv"><span>نائامادە بوون</span><b>${data.takenAbsent}</b></div>
+      ${data.editable ? '' :
+        `<p class="muted" style="margin-top:12px">${esc(data.lockedReason)}</p>`}
+      <div class="row" style="margin-top:16px">
+        <button class="btn ghost" data-close><span class="lbl">ئێستا نا</span></button>
+        <button class="btn gold" id="openAnyway"><span class="lbl">${
+          esc(data.editable ? 'بیکەرەوە و ڕاستی بکەرەوە' : 'بینین')}</span></button>
+      </div>`);
+    $('#openAnyway').onclick = ev => run(ev.currentTarget,
+      () => openSession(moduleId, scope, hours, start, date, true), 'بارکردن…');
+    return;
+  }
+
+  S.session = data;
+  S.roster  = data.roster;
+  S.marks   = {};
+  const blank = 'P'.repeat(data.hours);
+  /* هەر خوێندکارێک دەبێت کلیلی جیاوازی هەبێت. ئەگەر شیتەکە ناسنامەی بەتاڵ
+     یان دووبارە بگەڕێنێتەوە، دەگەڕێینەوە بۆ شوێنی ڕیز تا نیشانەکان
+     بەسەر یەکتردا نەنووسرێن. */
+  const usedIds = {};
+  data.roster.forEach((s, i) => {
+    if (!s.id || usedIds[s.id]) s.id = 'POS' + i;
+    usedIds[s.id] = true;
+    let m = (data.draft && data.draft[s.id]) ? String(data.draft[s.id]) : blank;
+    if (s.permit) m = 'E'.repeat(data.hours);      // مۆڵەتی پەسەندکراو سەردەکەوێت
+    S.marks[s.id] = (m + blank).slice(0, data.hours);
+  });
+  /* ڕەشنووسی ناوخۆیی نەنێردراو هەمیشە سەردەکەوێت */
+  const local = LS.get('draft_' + data.sessionId);
+  if (local) Object.assign(S.marks, local);
+
+  S.dirty = false;
+  closeSheet();
+  show('roster', data.module, [data.date, shiftTxt(data.shift), yearTxt(data.year),
+       scopeTxt(data.scope, data.year, data.shift), data.hours + ' کاتژمێر']
+       .filter(Boolean).join(' · '));
+  $('#search').value = '';
+  renderHourHead(); renderRoster();
+  $('#savedNote').textContent = data.status === 'final'
+      ? (data.editable ? 'نێردراو · دەکرێت ڕاست بکرێتەوە' : 'داخراو') : '';
+  $('#finalBtn').classList.toggle('hide', !data.editable);
+  $('#draftBtn').classList.toggle('hide', !data.editable);
+}
+
+function renderHourHead(){
+  const h = S.session.hours;
+  $('#hourHead').innerHTML =
+    `<span class="sp">ناوی خوێندکار</span>` +
+    Array.from({length:h}, (_,i) => `<button data-col="${i}">${i+1}</button>`).join('');
+}
+
+function renderRoster(filter){
+  const q = (filter || '').trim().toLowerCase();
+  const list = q ? S.roster.filter(s => s.name.toLowerCase().includes(q)) : S.roster;
+  const h = S.session.hours;
+  let html = '';
+  for (const s of list){
+    const m = S.marks[s.id] || 'P'.repeat(h);
+    const flagged = m.includes('A');
+    const lock = !!s.permit;
+    html += `<div class="stu ${flagged?'flagged':''} ${lock?'locked':''}" data-sid="${esc(s.id)}">
+      <div class="n"><b>${esc(s.name)}</b><span>${esc(s.group ? 'گروپی ' + s.group : '')}${
+        lock ? ' · <span class="pill info">مۆڵەتدار</span> '+esc(s.permit) : ''}</span></div>
+      <div class="cells">${Array.from({length:h},(_,i)=>
+        `<button class="hr" data-m="${m[i]||'P'}" data-i="${i}"${lock?' disabled':''}>${m[i]||'P'}</button>`).join('')}</div>
+    </div>`;
+  }
+  $('#rosterBody').innerHTML = html || `<div class="empty"><b>هیچ خوێندکارێک نییە</b>
+    <span class="muted">خوێندکارانی ئەم قۆناغ و شیفتە لە شیتەکە زیاد بکە.</span></div>`;
+  updateCounts();
+}
+
+function updateCounts(){
+  let a = 0, e = 0, p = 0;
+  Object.keys(S.marks).forEach(k => {
+    const m = S.marks[k];
+    if (m.includes('A')) a++; else if (m.includes('E')) e++; else p++;
+  });
+  $('#cPresent').textContent = p; $('#cAbsent').textContent = a; $('#cExcused').textContent = e;
+}
+
+const CYCLE = { P:'A', A:'E', E:'L', L:'P' };
+$('#rosterBody').addEventListener('click', e => {
+  const row0 = e.target.closest('.stu');
+  if (row0 && row0.classList.contains('locked')) {
+    toast('ئەم خوێندکارە مۆڵەتی پەسەندکراوی هەیە و ناتوانرێت نائامادە بکرێت.', 'err'); return;
+  }
+  const cell = e.target.closest('.hr'); if (!cell) return;
+  if (S.session && !S.session.editable) { toast(S.session.lockedReason, 'err'); return; }
+  const row = cell.closest('.stu'); const sid = row.dataset.sid;
+  const i = Number(cell.dataset.i);
+  const cur = S.marks[sid] || 'P'.repeat(S.session.hours);
+  const next = CYCLE[cur[i]] || 'A';
+  S.marks[sid] = cur.slice(0,i) + next + cur.slice(i+1);
+  cell.dataset.m = next; cell.textContent = next;
+  row.classList.toggle('flagged', S.marks[sid].includes('A'));
+  updateCounts(); markDirty();
+  if (navigator.vibrate) navigator.vibrate(8);
+});
+
+/* دەست لە سەری ستوونێک = ئەو کاتژمێرە بۆ هەمووان دادەنرێت */
+$('#hourHead').addEventListener('click', e => {
+  const b = e.target.closest('[data-col]'); if (!b) return;
+  if (S.session && !S.session.editable) return;
+  const i = Number(b.dataset.col);
+  const shown = $$('#rosterBody .stu:not(.locked)').map(el => el.dataset.sid);
+  const anyPresent = shown.some(sid => (S.marks[sid] || '')[i] !== 'A');
+  shown.forEach(sid => {
+    const cur = S.marks[sid] || 'P'.repeat(S.session.hours);
+    S.marks[sid] = cur.slice(0,i) + (anyPresent ? 'A' : 'P') + cur.slice(i+1);
+  });
+  renderRoster($('#search').value); markDirty();
+});
+
+/* یەک دەست لێدان هەموو لیستەکە دەگەڕێنێتەوە بۆ ئامادە */
+$('#allPresentBtn').onclick = () => {
+  if (S.session && !S.session.editable) return;
+  const blank = 'P'.repeat(S.session.hours);
+  const locked = {};
+  S.roster.forEach(s => { if (s.permit) locked[s.id] = true; });
+  Object.keys(S.marks).forEach(sid => { if (!locked[sid]) S.marks[sid] = blank; });
+  renderRoster($('#search').value); markDirty();
+  toast('هەموو ئامادەن', 'good');
+};
+
+let searchTimer;
+$('#search').addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => renderRoster(e.target.value), 110);
+});
+
+function markDirty(){
+  S.dirty = true;
+  LS.set('draft_' + S.session.sessionId, S.marks);     // تۆڕی سەلامەتی ناوخۆیی
+  $('#savedNote').textContent = '•';
+  clearTimeout(S.draftTimer);
+  S.draftTimer = setTimeout(() => saveDraft(true), 9000);   // پاشەکەوتی بێدەنگ
+}
+
+/* تەنها ناسنامەی دانیشتنەکە دەچێت بۆ سێرڤەر — هەرگیز هەموو لیستەکە نا */
+function sessMeta(){
+  const s = S.session;
+  return { sessionId:s.sessionId, date:s.date, year:s.year, shift:s.shift,
+           moduleId:s.moduleId, module:s.module, scope:s.scope, hours:s.hours };
+}
+
+async function saveDraft(silent){
+  if (!S.session) return;
+  const body = { code:S.code, session:sessMeta(), marks:S.marks };
+  try {
+    await api('saveDraft', body, 12000);
+    S.dirty = false;
+    $('#savedNote').textContent = 'پاشەکەوتکرا · ' + new Date().toTimeString().slice(0,5);
+  } catch(e){
+    $('#savedNote').textContent = 'بێ ئینتەرنێت — لەم ئامێرە پاشەکەوت کراوە';
+    if (!silent) throw e;
+  }
+}
+$('#draftBtn').onclick = e => run(e.currentTarget, async () => {
+  await saveDraft(false);
+  toast('پاشەکەوتکرا', 'good');
+}, 'پاشەکەوتکردن…');
+
+/* ---------------------------------------------------------- کۆتایی */
+$('#finalBtn').onclick = () => {
+  let absent = 0;
+  Object.keys(S.marks).forEach(k => { if (S.marks[k].includes('A')) absent++; });
+  openSheet(`
+    <h3>کۆتایی بەم دانیشتنە بهێنم؟</h3>
+    <p class="sub">ئیمەیڵ بۆ خوێندکارە نائامادەکان دەنێردرێت و ڕێژەکان نوێ دەکرێنەوە.
+      ئەمڕۆ هێشتا دەتوانیت ڕاستی بکەیتەوە.</p>
+    <div class="kv"><span>وانە</span><b>${esc(S.session.module)}</b></div>
+    <div class="kv"><span>شیفت</span><b>${esc(shiftTxt(S.session.shift))}</b></div>
+    <div class="kv"><span>کاتژمێر</span><b>${S.session.hours}</b></div>
+    <div class="kv"><span>نائامادە</span><b>${absent}</b></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn ghost" data-close><span class="lbl">پاشگەزبوونەوە</span></button>
+      <button class="btn gold" id="goFinal"><span class="lbl">بەڵێ، کۆتایی بهێنە</span></button>
+    </div>`);
+  $('#goFinal').onclick = e => run(e.currentTarget, doFinalize, 'ناردن…');
+};
+
+async function doFinalize(){
+  const body = { code:S.code, session:sessMeta(), marks:S.marks };
+  try {
+    const r = await api('finalizeSession', body, 60000);
+    LS.del('draft_' + S.session.sessionId);
+    closeSheet();
+    toast('ئامادەبوون بە سەرکەوتوویی نێردرا' +
+          (r.emails ? ` · ${r.emails} ئاگادارکردنەوە نێردرا` : ''), 'good');
+    await loadBoot(true);
+  } catch(err){
+    /* بێ ئینتەرنێت → بیپارێزە و دواتر بنێرە */
+    const q = LS.get('pending', []);
+    q.push(body); LS.set('pending', q);
+    LS.del('draft_' + S.session.sessionId);
+    closeSheet();
+    toast('لەم ئامێرە پاشەکەوت کرا — کاتێک ئینتەرنێت گەڕایەوە دەنێردرێت', 'good');
+    renderHome();
+  }
+}
+
+function renderPending(){
+  const q = LS.get('pending', []);
+  $('#pendingBox').classList.toggle('hide', q.length === 0);
+  if (q.length) $('#pendingTxt').textContent = q.length + ' دانیشتن چاوەڕێی ناردنە';
+}
+$('#syncBtn').onclick = e => run(e.currentTarget, flushPending, 'ناردن…');
+
+async function flushPending(){
+  const q = LS.get('pending', []);
+  if (!q.length) return;
+  const left = [];
+  for (const body of q){
+    try { body.code = S.code; await api('finalizeSession', body, 60000); }
+    catch(e){ left.push(body); }
+  }
+  LS.set('pending', left);
+  renderPending();
+  if (!left.length) { toast('تەواو', 'good'); await loadBoot(true); }
+}
+
+/* ------------------------------------------ تۆمارەکانی مامۆستا */
+function filterArgs(){
+  const p = $('#fPct'), f = $('#fFrom'), tt = $('#fTo');
+  const v = p ? p.value : '';
+  return {
+    from: f && f.value ? f.value : '',
+    to:   tt && tt.value ? tt.value : '',
+    minPct:  (v && v !== 'over10') ? v : '',
+    overPct: v === 'over10' ? 10 : ''
+  };
+}
+
+async function loadRecords(){
+  const data = await api('teacherReport',
+    Object.assign({ code:S.code, moduleId:S.recModule }, filterArgs()));
+  S.records = data.rows; S.recGen = data.generated;
+  if (S.recTab === 'sessions'){
+    const h = await api('sessionHistory', { code:S.code, moduleId:S.recModule });
+    S.history = h.rows;
+  }
+  renderRecords();
+}
+
+$('#fApply').onclick = e => run(e.currentTarget, loadRecords, 'بارکردن…');
+$('#fClear').onclick = e => {
+  $('#fPct').value = ''; $('#fFrom').value = ''; $('#fTo').value = '';
+  run(e.currentTarget, loadRecords, 'بارکردن…');
+};
+
+function renderRecords(){
+  const b = S.boot;
+  const m = b.modules.find(x => x.id === S.recModule);
+  show('records', 'تۆمارەکان', m ? (m.nameKu || m.name) + ' · ' + shiftTxt(m.shift) : '');
+
+  const several = b.modules.length > 1;
+  $('#recTabs').innerHTML = b.modules.map(x =>
+    `<button class="${x.id===S.recModule?'on':''}" data-mod="${esc(x.id)}">${
+      esc(x.nameKu || x.name)}${several ? ' · ' + esc(SHIFT_SHORT[x.shift] || '') : ''}</button>`).join('');
+  $$('#v-records .tabs [data-rec]').forEach(el => el.classList.toggle('on', el.dataset.rec === S.recTab));
+  $('#recFilters').classList.toggle('hide', S.recTab === 'sessions');
+
+  if (S.recTab === 'sessions')  return renderSessions();
+  if (S.recTab === 'late')      return renderSideList('late');
+  if (S.recTab === 'excused')   return renderSideList('excused');
+
+  /* ڕیزبەندی وەک تۆماری پۆل: گروپی A ئینجا B، ناوەکان بە ڕیزبەندی */
+  const rows = (S.records || []).slice().sort((a, b2) =>
+    String(a.group || '').localeCompare(String(b2.group || '')) ||
+    String(a.name  || '').localeCompare(String(b2.name  || '')));
+  if (!rows.length){
+    $('#recBody').innerHTML = `<div class="empty"><b>هێشتا هیچ نائامادەبوونێک تۆمار نەکراوە.</b></div>`;
+    return;
+  }
+
+  const planned = rows[0] ? rows[0].planned : 0;
+  const held    = rows[0] ? rows[0].heldHours : 0;
+  $('#recBody').innerHTML = `
+    <div class="row" style="margin-bottom:9px;gap:7px">
+      <button class="btn sm sec" data-export="xlsx" style="flex:1">
+        <span class="lbl">ئێکسڵ</span></button>
+      <button class="btn sm sec" data-export="docx" style="flex:1">
+        <span class="lbl">وۆرد</span></button>
+    </div>
+    <details id="recAllBox" style="margin-bottom:12px"><summary class="muted" style="cursor:pointer;font-size:12.5px">
+        ڕاپۆرتی هەموو وانەکان…</summary>
+      <label class="f" style="margin:11px 0 8px"><span class="lb">شێوازی ڕاپۆرت</span>
+        <select id="recStyle">
+          <option value="subject">بەپێی وانە</option>
+          <option value="student">هەر خوێندکارێک لە دێڕێکدا</option>
+        </select></label>
+      <div class="row" style="gap:7px">
+        <button class="btn sm ghost" data-exportall="xlsx" style="flex:1">
+          <span class="lbl">ئێکسڵ</span></button>
+        <button class="btn sm ghost" data-exportall="docx" style="flex:1">
+          <span class="lbl">وۆرد</span></button>
+      </div>
+    </details>
+    <div class="kv"><span>کاتژمێری پلاندراو</span><b>${planned}</b></div>
+    <div class="kv"><span>ئەنجامدراو تا ئێستا</span><b>${held}</b></div>
+    <div class="tscroll" style="margin-top:11px"><table><thead><tr>
+      <th>ناوی خوێندکار</th><th>گروپ</th>
+      <th style="text-align:end">نائامادە</th>
+      <th style="text-align:end">ڕێژە</th>
+      <th style="text-align:end">ماوە</th>
+    </tr></thead><tbody>${rows.map(r => `
+      <tr data-stu="${esc(r.studentId)}">
+        <td><b>${esc(r.name)}</b>
+          <div class="bar ${r.level}"><i style="width:${Math.min(100, r.pctUnexcused*5)}%"></i></div></td>
+        <td>${esc(r.group)}</td>
+        <td class="num">${r.absentHours}${r.excusedHours?`<span class="muted"> +${r.excusedHours}</span>`:''}</td>
+        <td class="num"><span class="pill ${r.level}">${r.pctUnexcused}%</span></td>
+        <td class="num">${r.remainingHours}</td>
+      </tr>`).join('')}</tbody></table></div>
+    <p class="muted" style="margin-top:11px">نوێکرایەوە: <span class="ltr">${esc(S.recGen||'')}</span></p>`;
+}
+
+/* «خوێندکار ١ پێنج جار درەنگ بووە» — یەک دێڕ بۆ هەر خوێندکار، زۆرترین سەرەتا */
+function renderSideList(kind){
+  const key = kind === 'late' ? 'lateCount' : 'excusedCount';
+  const hrs = kind === 'late' ? 'lateHours' : 'excusedHours';
+  const rows = (S.records || []).filter(r => (r[key] || 0) > 0)
+                                .sort((a, b) => (b[key]||0) - (a[key]||0) ||
+                                                a.name.localeCompare(b.name));
+  if (!rows.length){
+    $('#recBody').innerHTML = `<div class="empty"><b>${
+      kind==='late' ? 'هیچ درەنگێک تۆمار نەکراوە.' : 'هیچ مۆڵەتێک تۆمار نەکراوە.'}</b></div>`;
+    return;
+  }
+  $('#recBody').innerHTML = `
+    <div class="tscroll"><table><thead><tr>
+      <th>ناوی خوێندکار</th><th>گروپ</th>
+      <th style="text-align:end">${kind==='late'?'درەنگ':'مۆڵەت'}</th>
+      <th style="text-align:end">کاتژمێر</th>
+    </tr></thead><tbody>${rows.map(r => `
+      <tr data-stu="${esc(r.studentId)}">
+        <td><b>${esc(r.name)}</b></td>
+        <td>${esc(r.group)}</td>
+        <td class="num"><span class="pill ${kind==='late'?'warn1':'info'}">${r[key]} جار</span></td>
+        <td class="num">${r[hrs]}</td>
+      </tr>`).join('')}</tbody></table></div>`;
+}
+
+function renderSessions(){
+  const rows = S.history || [];
+  $('#recBody').innerHTML = rows.length ? `
+    <div class="tscroll"><table><thead><tr>
+      <th>بەروار</th><th>شیفت</th><th>گروپ</th>
+      <th style="text-align:end">کاتژمێر</th>
+      <th style="text-align:end">نائامادە</th><th></th>
+    </tr></thead><tbody>${rows.map(r => `
+      <tr><td class="ltr">${esc(r.date)}</td>
+        <td><span class="pill ${r.shift==='E'?'eve':'morn'}">${esc(shiftTxt(r.shift))}</span></td>
+        <td>${r.scope==='ALL'?'هەموو':esc(r.scope)}</td>
+        <td class="num">${r.hours}</td><td class="num">${r.absent}</td>
+        <td><span class="pill ${r.status==='final'?'ok':'info'}">${
+          esc(r.status==='final'?'نێردراو':'ڕەشنووس')}</span></td>
+      </tr>`).join('')}</tbody></table></div>`
+    : `<div class="empty"><b>هێشتا هیچ دانیشتنێک نییە.</b></div>`;
+}
+
+$('#recTabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-mod]'); if (!b) return;
+  S.recModule = b.dataset.mod;
+  run(b, loadRecords, 'بارکردن…');
+});
+$('#v-records').addEventListener('click', e => {
+  const ex = e.target.closest('[data-export]');
+  if (ex){
+    const m = S.boot.modules.find(x => x.id === S.recModule);
+    return doExport(ex, Object.assign({
+      format: ex.dataset.export, moduleId: S.recModule,
+      moduleTitle: m ? (m.nameKu || m.name) : '',
+      shift: m ? m.shift : ''
+    }, filterArgs()));
+  }
+  const exAll = e.target.closest('[data-exportall]');
+  if (exAll){
+    const st = $('#recStyle');
+    return doExport(exAll, Object.assign({
+      format: exAll.dataset.exportall, style: st ? st.value : 'subject'
+    }, filterArgs()));
+  }
+  const tb = e.target.closest('[data-rec]');
+  if (tb){ S.recTab = tb.dataset.rec; return run(tb, loadRecords, 'بارکردن…'); }
+  const row = e.target.closest('[data-stu]');
+  if (row) return run(null, () => studentDetail(row.dataset.stu), 'بارکردن…');
+});
+
+/* -------------------------------------------- دەرهێنانی ئێکسڵ / وۆرد */
+function downloadB64(b64, filename, mime){
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  const url = URL.createObjectURL(new Blob([arr], { type: mime }));
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+function doExport(btn, opts){
+  return run(btn, async () => {
+    const f = await api('exportReport', Object.assign({ code: S.code }, opts), 180000);
+    downloadB64(f.b64, f.filename, f.mime);
+    toast('فایل داگیرا · ' + f.filename, 'good');
+  }, 'ئامادەکردنی فایل…', opts.format === 'docx' ? 'وۆرد' : 'ئێکسڵ');
+}
+
+/* ------------------------------------------ خوێندنەوەی فایلی خوێندکاران */
+/* خوێنەری ئێکسڵ ~١٠٠ کیلۆبایتە، بۆیە تەنها ئەو کاتە دادەبەزرێت کە
+   کەسێک بەڕاستی فایلێکی .xlsx هەڵبژێرێت. CSV پێویستی بە هیچ نییە. */
+function loadScript(src){
+  return new Promise((res, rej) => {
+    if (document.querySelector(`script[src="${src}"]`)) return res();
+    const s = document.createElement('script');
+    s.src = src; s.onload = () => res();
+    s.onerror = () => rej(new Error('نەتوانرا خوێنەری فایل بار بکرێت.'));
+    document.head.appendChild(s);
+  });
+}
+
+function parseCsv(text){
+  return text.split(/\r?\n/).filter(l => l.trim()).map(line => {
+    const out = []; let cur = '', q = false;
+    for (let i = 0; i < line.length; i++){
+      const c = line[i];
+      if (q){
+        if (c === '"' && line[i+1] === '"'){ cur += '"'; i++; }
+        else if (c === '"') q = false;
+        else cur += c;
+      } else if (c === '"') q = true;
+      else if (c === ',' || c === ';' || c === '\t'){ out.push(cur); cur = ''; }
+      else cur += c;
+    }
+    out.push(cur);
+    return out.map(s => s.trim());
+  });
+}
+
+const HEADER_WORDS = ['name','student','email','year','group','phone',
+                      'ناو','ئیمەیڵ','قۆناغ','گروپ','تەلەفۆن','شیفت'];
+
+async function readSheetFile(file){
+  let rows;
+  if (/\.csv$/i.test(file.name)){
+    rows = parseCsv(await file.text());
+  } else {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
+    const buf = await file.arrayBuffer();
+    const wb = XLSX.read(buf, { type:'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    rows = XLSX.utils.sheet_to_json(ws, { header:1, blankrows:false, defval:'' })
+                     .map(r => r.map(c => String(c == null ? '' : c).trim()));
+  }
+  rows = rows.filter(r => r.some(c => c !== ''));
+  /* ئەگەر فایلەکە سەرناوی هەبوو، لایبە */
+  if (rows.length){
+    const first = rows[0].join(' ').toLowerCase();
+    if (HEADER_WORDS.some(w => first.indexOf(w) >= 0)) rows = rows.slice(1);
+  }
+  return rows.map(r => [r[0]||'', r[1]||'', r[2]||'', r[3]||'', r[4]||'']);
+}
+
+async function studentDetail(studentId){
+  const r = await api('studentDetail', { code:S.code, studentId, moduleId:S.recModule });
+  const stu = (S.records || []).find(x => x.studentId === studentId) || {};
+  openSheet(`
+    <h3>${esc(stu.name || studentId)}</h3>
+    <p class="sub">${esc(stu.moduleKu || stu.module || '')} · ${
+      esc(shiftTxt(stu.shift))} · ${esc(stu.group ? 'گروپی ' + stu.group : '')}</p>
+    <div class="kv"><span>بێ مۆڵەت</span><b>${stu.absentHours||0} کات · ${stu.pctUnexcused||0}%</b></div>
+    <div class="kv"><span>کۆی گشتی</span><b>${stu.pctTotal||0}%</b></div>
+    <div class="kv"><span>کاتژمێری ماوە پێش محرومی</span><b>${stu.remainingHours||0}</b></div>
+    <div class="sec-t">وردەکاری نائامادەبوون</div>
+    ${r.rows.length ? `<table><tbody>${r.rows.map(x => `
+      <tr><td class="ltr">${esc(x.date)}</td>
+        <td class="ltr" style="font-family:ui-monospace,monospace;letter-spacing:.14em">${esc(x.marks)}</td>
+        <td class="num">${x.absent}</td>
+        <td><span class="pill ${x.status==='نائامادە'?'final':'info'}">${esc(x.status)}</span></td></tr>`).join('')}
+      </tbody></table>` : `<p class="muted">هیچ نائامادەبوونێک لەم وانەیەدا نییە.</p>`}`);
+}
+
+/* ---------------------------------------------------------- بەڕێوەبەر */
+function admFilterArgs(){
+  const p = $('#admPct'), f = $('#admFrom'), tt = $('#admTo'), sh = $('#admShift');
+  const v = p ? p.value : '';
+  return {
+    from: f && f.value ? f.value : '',
+    to:   tt && tt.value ? tt.value : '',
+    shift: sh && sh.value ? sh.value : '',
+    minPct:  (v && v !== 'over10') ? v : '',
+    overPct: v === 'over10' ? 10 : ''
+  };
+}
+
+async function loadAdmin(){
+  const d = await api('adminBootstrap', { code: S.code });
+  S.adm = d; S.role = 'admin';
+  if (!S.boot) { try { await loadBoot(true); } catch(e){} }
+  renderAdmin();
+}
+
+const SHIFT_OPTS = `<option value="">هەردوو شیفت</option>
+  <option value="M">بەیانی</option><option value="E">ئێوارە</option>`;
+
+function renderAdmin(){
+  show('admin', 'پانێڵی بەڕێوەبەر', S.adm ? S.adm.admin.name : '');
+  $$('#admTabs button').forEach(b => b.classList.toggle('on', b.dataset.adm === S.admTab));
+  const body = $('#admBody');
+  const d = S.adm;
+
+  /* ---------------- ڕاپۆرت ---------------- */
+  if (S.admTab === 'report'){
+    body.innerHTML = `<div class="card">
+      <label class="f"><span class="lb">شیفت</span>
+        <select id="admShift">${SHIFT_OPTS}</select></label>
+      <label class="f"><span class="lb">قۆناغ</span>
+        <select id="admYear"><option value="">هەموو قۆناغەکان</option>
+          ${(d.years||[]).map(y=>`<option value="${esc(y)}">${esc(yearTxt(y))}</option>`).join('')}</select></label>
+      <label class="f"><span class="lb">وانە</span>
+        <select id="admMod"><option value="">هەموو وانەکان</option>
+          ${d.modules.map(m=>`<option value="${esc(m.id)}">${esc(yearTxt(m.year))} · ${
+            esc(shiftTxt(m.shift))} · ${esc(m.nameKu || m.name)}</option>`).join('')}</select></label>
+      <label class="f"><span class="lb">شێوازی ڕاپۆرت</span>
+        <select id="admStyle">
+          <option value="subject">بەپێی وانە</option>
+          <option value="student">هەر خوێندکارێک لە دێڕێکدا</option>
+        </select></label>
+      <div class="frow" style="display:flex;gap:9px;flex-wrap:wrap">
+        <label class="f" style="flex:1;min-width:120px"><span class="lb">نائامادەبوون لانیکەم</span>
+          <select id="admPct">
+            <option value="">بێ پاڵاوتن</option>
+            <option value="5">≥ ٥٪</option><option value="7.5">≥ ٧٫٥٪</option>
+            <option value="10">≥ ١٠٪</option><option value="over10">زیاتر لە ١٠٪</option>
+          </select></label>
+        <label class="f" style="flex:1;min-width:110px"><span class="lb">لە بەرواری</span>
+          <input type="date" id="admFrom"></label>
+        <label class="f" style="flex:1;min-width:110px"><span class="lb">بۆ بەرواری</span>
+          <input type="date" id="admTo"></label>
+      </div>
+      <button class="btn" id="admRun"><span class="lbl">پیشاندانی ڕاپۆرت</span></button>
+      <div class="row" style="margin-top:9px;gap:7px">
+        <button class="btn sm sec" data-aexport="xlsx" style="flex:1">
+          <span class="lbl">ئێکسڵ</span></button>
+        <button class="btn sm sec" data-aexport="docx" style="flex:1">
+          <span class="lbl">وۆرد</span></button>
+      </div>
+      <div id="admReportOut" style="margin-top:14px"></div></div>`;
+    $('#admRun').onclick = e => run(e.currentTarget, async () => {
+      const r = await api('adminReport', Object.assign({
+        code:S.code, moduleId: $('#admMod').value, year: $('#admYear').value
+      }, admFilterArgs()));
+      $('#admReportOut').innerHTML = r.rows.length ? `<div class="tscroll"><table><thead><tr>
+        <th>ناوی خوێندکار</th><th>وانە</th>
+        <th style="text-align:end">نائامادە</th><th style="text-align:end">ڕێژە</th>
+        <th style="text-align:end">ماوە</th></tr></thead><tbody>
+        ${r.rows.map(x=>`<tr><td><b>${esc(x.name)}</b>
+            <span class="muted"> ${esc(yearTxt(x.year))} · ${esc(shiftTxt(x.shift))} ${esc(x.group)}</span></td>
+          <td class="muted">${esc(x.moduleKu || x.module)}</td><td class="num">${x.absentHours}</td>
+          <td class="num"><span class="pill ${x.level}">${x.pctUnexcused}%</span></td>
+          <td class="num">${x.remainingHours}</td></tr>`).join('')}</tbody></table></div>
+        <p class="muted" style="margin-top:9px">${r.rows.length} دێڕ</p>`
+        : `<div class="empty"><b>هیچ تۆمارێک نەدۆزرایەوە.</b></div>`;
+    }, 'بارکردن…');
+  }
+
+  /* ---------------- پشکنینی ڕۆژانە ---------------- */
+  if (S.admTab === 'audit'){
+    body.innerHTML = `<div class="card">
+      <p class="note">ئەمە پیشان دەدات کام وانەی ئەم ڕۆژە خشتەی بۆ هەیە و
+        ئامادەبوونی بۆ نەنێردراوە.</p>
+      <label class="f"><span class="lb">بەروار</span>
+        <input type="date" id="audDate" value="${todayISO()}"></label>
+      <label class="f"><span class="lb">شیفت</span>
+        <select id="audShift">${SHIFT_OPTS}</select></label>
+      <button class="btn" id="audRun"><span class="lbl">پشکنین</span></button>
+      <div id="audOut" style="margin-top:14px"></div></div>`;
+    $('#audRun').onclick = e => run(e.currentTarget, async () => {
+      const r = await api('missingAudit', { code:S.code, date: $('#audDate').value,
+                                            shift: $('#audShift').value });
+      $('#audOut').innerHTML = `
+        <div class="kv"><span>ڕۆژ</span><b>${esc(r.day)}</b></div>
+        <div class="kv"><span>پێویست</span><b>${r.expected}</b></div>
+        <div class="kv"><span>نێردراو</span><b>${r.submitted.length}</b></div>
+        <div class="sec-t">نەنێردراو</div>
+        ${r.missing.length ? r.missing.map(m=>`<div class="slot"><div class="s"><b>${esc(m.label)}</b>
+            <span>${esc(m.teacher)}</span></div><span class="pill final">!</span></div>`).join('')
+          : `<p class="muted">هەموو تۆمارەکانی ئەم ڕۆژە نێردراون.</p>`}`;
+    }, 'بارکردن…');
+  }
+
+  /* ---------------- مۆڵەتەکان ---------------- */
+  if (S.admTab === 'permit'){
+    body.innerHTML = `<div class="card">
+      <p class="note">مۆڵەتی پەسەندکراو ئەو خوێندکارە لەو بەروارانەدا داخراو دەکات:
+        مامۆستا ناتوانێت نائامادەی بکات، و ئەو نائامادەبوونانەی پێشتر تۆمارکراون
+        دەگۆڕدرێن بۆ مۆڵەت.</p>
+      <label class="f"><span class="lb">خوێندکار</span>
+        <select id="pStu">${d.students.map(s=>`<option value="${esc(s.id)}">${esc(s.name)} — ${
+          esc(yearTxt(s.year))} · ${esc(shiftTxt(s.shift))} · ${esc(s.group)}</option>`).join('')}</select></label>
+      <label class="f"><span class="lb">وانە</span>
+        <select id="pMod"><option value="ALL">هەموو وانەکان</option>
+          ${d.modules.map(m=>`<option value="${esc(m.id)}">${esc(m.nameKu || m.name)} · ${
+            esc(shiftTxt(m.shift))}</option>`).join('')}</select></label>
+      <div class="row"><label class="f" style="flex:1"><span class="lb">لە بەرواری</span>
+        <input type="date" id="pFrom" value="${todayISO()}"></label>
+      <label class="f" style="flex:1"><span class="lb">بۆ بەرواری</span>
+        <input type="date" id="pTo" value="${todayISO()}"></label></div>
+      <label class="f"><span class="lb">هۆکار</span><input id="pWhy" placeholder="نەخۆشی، کاری خێزانی…"></label>
+      <button class="btn" id="pAdd"><span class="lbl">زیادکردنی مۆڵەت</span></button></div>`;
+    $('#pAdd').onclick = e => run(e.currentTarget, async () => {
+      const sel = $('#pStu');
+      const name = sel.options[sel.selectedIndex].text.split(' — ')[0];
+      const r = await api('addPermit', { code:S.code, permit:{
+        studentId: sel.value, name, moduleId: $('#pMod').value,
+        from: $('#pFrom').value, to: $('#pTo').value, reason: $('#pWhy').value }});
+      toast('مۆڵەت تۆمارکرا' + (r.converted ? ` · ${r.converted} تۆمار گۆڕدرا` : ''), 'good');
+      $('#pWhy').value = '';
+    }, 'پاشەکەوتکردن…');
+  }
+
+  /* ---------------- مامۆستایان ---------------- */
+  if (S.admTab === 'teachers'){
+    body.innerHTML = `<div class="card tight">
+      <div class="row" style="margin-bottom:10px">
+        <button class="btn sm gold" id="invAll" style="flex:1">
+          <span class="lbl">ناردنی کۆد بۆ هەموو مامۆستایان</span></button></div>
+      <p class="muted" style="margin-bottom:11px">${d.quota} ئیمەیڵ ماوە بۆ ئەمڕۆ</p>
+      ${d.teachers.map(x=>`<div class="mod">
+        <div class="dot">${esc(String(x.modules||'--').replace(/-.*$/,'').slice(0,3))}</div>
+        <div class="m"><b>${esc(x.name)}</b>
+          <span class="ltr" style="display:block">${esc(x.email||'—')} · ${esc(x.code)}</span>
+          <span>${esc(x.role)} · ${esc(String(x.modules||'').split(',').length)} وانە</span></div>
+        <div class="acts"><button class="btn sm sec" data-inv="${esc(x.id)}">
+          <span class="lbl">ناردنی کۆد</span></button></div></div>`).join('')}</div>`;
+    $('#invAll').onclick = e => run(e.currentTarget, async () => {
+      const r = await api('sendInvite', { code:S.code, teacherId:'ALL' }, 120000);
+      toast(r.sent + ' ئیمەیڵ نێردرا', 'good');
+    }, 'ناردن…');
+  }
+
+  /* ---------------- خوێندکاران ---------------- */
+  if (S.admTab === 'students'){
+    const counts = d.shiftCounts || { M:0, E:0 };
+    body.innerHTML = `<div class="card">
+      <div class="row" style="margin-bottom:13px;gap:8px">
+        <div class="sum" style="flex:1;margin:0">
+          <div><b>${counts.M||0}</b><span>بەیانی</span></div>
+          <div><b>${counts.E||0}</b><span>ئێوارە</span></div>
+          <div><b>${d.students.length}</b><span>کۆی گشتی</span></div>
+        </div>
+      </div>
+      <p class="note">خوێندکارەکان بۆ ئەو <b>قۆناغ و شیفتەی</b> لە خوارەوە
+        هەڵدەبژێریت زیاد دەکرێن. ناسنامەی خوێندکار خۆکار دروست دەکرێت.</p>
+      <div class="row" style="gap:9px">
+        <label class="f" style="flex:1"><span class="lb">قۆناغ</span>
+          <select id="impYear">${['Year1','Year2','Year3','Year4'].map(y=>
+            `<option value="${y}">${esc(yearTxt(y))}</option>`).join('')}</select></label>
+        <label class="f" style="flex:1"><span class="lb">شیفت</span>
+          <select id="impShift"><option value="M">بەیانی</option>
+            <option value="E">ئێوارە</option></select></label>
+      </div>
+      <div style="border:1.5px dashed var(--line);border-radius:14px;padding:15px;margin-bottom:14px">
+        <b style="font-size:14px">هاوردەکردن لە فایلی ئێکسڵ</b>
+        <p class="muted" style="margin:6px 0 11px">ستوونەکان بەم ڕیزبەندییە:
+          ناو · ئیمەیڵ · قۆناغ · گروپ · تەلەفۆن</p>
+        <input type="file" id="impFile" accept=".xlsx,.xls,.csv"
+               style="min-height:auto;padding:9px;border-style:dashed">
+        <div id="impFileOut" class="muted" style="margin-top:8px"></div>
+      </div>
+      <p class="muted" style="margin-bottom:9px">یان هەر دێڕێک یەک خوێندکار:
+        ناو، ئیمەیڵ، گروپ</p>
+      <textarea id="impTxt" placeholder="ئەحمەد کەریم, ahmed@uor.edu.krd, A&#10;سارا جەمال, sara@uor.edu.krd, B"></textarea>
+      <button class="btn" id="impBtn" style="margin-top:11px"><span class="lbl">هاوردەکردنی خوێندکاران</span></button>
+      <div class="sec-t">خوێندکاران · ${d.students.length}</div>
+      <div class="tscroll"><table><tbody>${d.students.slice(0,500).map(s=>
+        `<tr><td class="muted ltr">${esc(s.id)}</td><td><b>${esc(s.name)}</b></td>
+         <td class="muted">${esc(yearTxt(s.year))}</td>
+         <td><span class="pill ${s.shift==='E'?'eve':'morn'}">${esc(shiftTxt(s.shift))}</span></td>
+         <td>${esc(s.group)}</td><td class="muted ltr">${esc(s.email||'—')}</td></tr>`).join('')}
+      </tbody></table></div></div>`;
+
+    $('#impBtn').onclick = e => run(e.currentTarget, async () => {
+      const r = await api('importStudents', { code:S.code, year: $('#impYear').value,
+                                              shift: $('#impShift').value,
+                                              text: $('#impTxt').value }, 60000);
+      toast(r.added + ' خوێندکار زیادکرا' + (r.skipped ? ` · ${r.skipped} پەڕاندرا` : ''), 'good');
+      $('#impTxt').value = '';
+      await loadAdmin();
+    }, 'پاشەکەوتکردن…');
+
+    $('#impFile').onchange = ev => {
+      const file = ev.target.files && ev.target.files[0];
+      if (!file) return;
+      run(null, async () => {
+        const rows = await readSheetFile(file);
+        $('#impFileOut').textContent = rows.length + ' ڕیز دۆزرایەوە';
+        if (!rows.length) return;
+        const r = await api('importStudents',
+          { code:S.code, year: $('#impYear').value, shift: $('#impShift').value,
+            rows: rows }, 120000);
+        toast(r.added + ' خوێندکار زیادکرا' + (r.skipped ? ` · ${r.skipped} پەڕاندرا` : ''), 'good');
+        ev.target.value = '';
+        await loadAdmin();
+      }, 'خوێندنەوەی فایل…');
+    };
+  }
+
+  /* ---------------- ڕێکخستن ---------------- */
+  if (S.admTab === 'settings'){
+    const keys = [
+      ['WEEKS','ژمارەی هەفتەکانی خول'],
+      ['DEPARTMENT_KU','ناوی بەش (کوردی)'],
+      ['TERM','ناوی خول'],
+      ['APP_URL','ناونیشانی ئەپ'],
+      ['VIDEO_URL','لینکی ڤیدیۆی فێرکاری'],
+      ['WARN1_PCT','ئاگاداری یەکەم ٪'],
+      ['WARN2_PCT','ئاگاداری دووەم ٪'],
+      ['FINAL_PCT','ئاگاداری کۆتایی ٪'],
+      ['DEPRIVE_UNEXCUSED_PCT','محرومی بێ مۆڵەت ٪'],
+      ['DEPRIVE_TOTAL_PCT','محرومی بە مۆڵەتەوە ٪'],
+      ['EMAILS_ENABLED','ناردنی ئیمەیڵ (true / false)']
+    ];
+    body.innerHTML = `<div class="card">${keys.map(k=>`
+      <label class="f"><span class="lb">${esc(k[1])} <span class="muted ltr">${esc(k[0])}</span></span>
+        <input data-set="${esc(k[0])}" value="${esc(d.settings[k[0]] !== undefined ? d.settings[k[0]] : '')}"></label>`).join('')}
+      <button class="btn" id="setSave"><span class="lbl">پاشەکەوتکردن</span></button>
+      <button class="btn sec" id="cacheBtn" style="margin-top:9px">
+        <span class="lbl">نوێکردنەوەی زانیاری لە شیتەکە</span></button>
+      <p class="muted" style="margin-top:9px">دوای دەستکاری شیتەکە بە دەست، ئەمە
+        بەکاربهێنە ئەگەر ئەپ هێشتا لیستی کۆن پیشان دەدات.</p></div>`;
+    $('#cacheBtn').onclick = e => run(e.currentTarget, async () => {
+      const r = await api('clearCache', { code:S.code });
+      toast(`${r.students} خوێندکار · ${r.modules} وانە · ${r.schedule} خشتە`, 'good');
+      await loadAdmin();
+    }, 'بارکردن…');
+    $('#setSave').onclick = e => run(e.currentTarget, async () => {
+      for (const el of $$('[data-set]')) {
+        await api('saveSetting', { code:S.code, key:el.dataset.set, value:el.value });
+      }
+      toast('ڕێکخستن پاشەکەوتکرا', 'good');
+      await loadAdmin();
+    }, 'پاشەکەوتکردن…');
+  }
+}
+
+$('#admTabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-adm]'); if (!b) return;
+  S.admTab = b.dataset.adm; renderAdmin();
+});
+$('#admBody').addEventListener('click', e => {
+  const ex = e.target.closest('[data-aexport]');
+  if (ex){
+    const y = $('#admYear'), m = $('#admMod');
+    const mod = m && m.value ? (S.adm.modules.find(x => x.id === m.value) || {}) : null;
+    const st = $('#admStyle');
+    return doExport(ex, Object.assign({
+      format: ex.dataset.aexport, scopeAll: true,
+      year: y ? y.value : '', moduleId: m ? m.value : '',
+      moduleTitle: mod ? (mod.nameKu || mod.name) : '',
+      style: st ? st.value : 'subject'
+    }, admFilterArgs()));
+  }
+  const b = e.target.closest('[data-inv]'); if (!b) return;
+  run(b, async () => {
+    await api('sendInvite', { code:S.code, teacherId:b.dataset.inv }, 60000);
+    toast('ئیمەیڵ نێردرا', 'good');
+  }, 'ناردن…');
+});
+
+/* ------------------------------------------------- پەنجەرەی خوارەوە */
+function openSheet(html){ $('#sheetBody').innerHTML = html; $('#sheet').classList.add('show'); }
+function closeSheet(){ $('#sheet').classList.remove('show'); }
+$('#sheet').addEventListener('click', e => {
+  if (e.target.closest('[data-close]')) return closeSheet();
+  const g = e.target.closest('[data-go]');
+  if (g){
+    const d = $('#sessDate');
+    run(g, () => openSession(g.dataset.go, g.dataset.sc, Number(g.dataset.h),
+                             g.dataset.st, d ? d.value : null), 'بارکردن…');
+  }
+});
+
+/* ------------------------------------------------- دابەزاندن وەک ئەپ */
+let installPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); installPrompt = e;
+  $('#installBtn').classList.remove('hide');
+});
+window.addEventListener('appinstalled', () => {
+  installPrompt = null; $('#installBtn').classList.add('hide');
+});
+
+$('#installBtn').onclick = async () => {
+  if (installPrompt){
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null;
+    $('#installBtn').classList.add('hide');
+    return;
+  }
+  const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  openSheet(`<h3>دابەزاندنی ئەپ</h3>
+    <p class="sub">دوای دامەزراندن، ئەپەکە بەبێ ئینتەرنێتیش لەناو پۆل کاردەکات.</p>
+    ${ios
+      ? `<div class="note"><b>بۆ ئایفۆن (Safari)</b><br>
+           ١. دوگمەی هاوبەشکردن <b dir="ltr">Share</b> لە خوارەوەی شاشەکە بکە<br>
+           ٢. <b dir="ltr">Add to Home Screen</b> هەڵبژێرە<br>
+           ٣. <b dir="ltr">Add</b> بکە</div>`
+      : `<div class="note"><b>بۆ ئەندرۆید (Chrome)</b><br>
+           ١. سێ خاڵەکەی سەرەوەی لای ڕاست <b dir="ltr">(⋮)</b> بکە<br>
+           ٢. <b dir="ltr">Install app</b> یان <b dir="ltr">Add to Home screen</b> هەڵبژێرە<br>
+           ٣. <b dir="ltr">Install</b> بکە</div>`}
+    <button class="btn" data-close><span class="lbl">تەواو</span></button>`);
+};
+
+/* پێشتر دامەزراوە؟ ئەوا دوگمەکە تەنها ژاوەژاوە */
+if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone){
+  $('#installBtn').classList.add('hide');
+}
+
+/* ---------------------------------------------------------- دەستپێک */
+function netState(){ $('#net').classList.toggle('show', !navigator.onLine); }
+window.addEventListener('online',  () => { netState(); flushPending(); });
+window.addEventListener('offline', netState);
+
+/* ئەگەر مامۆستا لە نیوەی کار ئەپەکە دابخات، ڕەشنووس پاشەکەوت دەکرێت */
+window.addEventListener('pagehide', () => {
+  if (S.dirty && S.session) LS.set('draft_' + S.session.sessionId, S.marks);
+});
+
+(async function init(){
+  netState();
+  S.shiftFilter = LS.get('shiftFilter', '') || '';
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+  const urlCode = new URLSearchParams(location.search).get('c');
+  const saved = LS.get('code');
+  const code = urlCode || saved;
+  if (urlCode) history.replaceState({}, '', location.pathname);
+
+  if (!code){ show('login'); return; }
+
+  S.code = code; LS.set('code', code);
+  const cached = LS.get('boot');
+  if (cached){ S.boot = cached; renderHome(); }         // پیشاندانی خێرا لە کاش
+  else busyOn('بارکردن…');
+  try {
+    await loadBoot(true);
+  } catch(e){
+    if (!cached){ show('login'); toast(e.message || 'پەیوەندی سەرکەوتوو نەبوو', 'err'); }
+  } finally { if (!cached) busyOff(); }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img"
+     aria-label="ئامادەبوون — بەشی کاری کۆمەڵایەتی">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17694e"/>
+      <stop offset="1" stop-color="#0d4433"/>
+    </linearGradient>
+  </defs>
+
+  <!-- پاشبنەما -->
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+
+  <!-- بنکەی پاڵپشتی — دوو دەستی کراوە -->
+  <path d="M438.3 306.4 A194 194 0 0 1 73.7 306.4"
+        fill="none" stroke="#e0a526" stroke-width="30" stroke-linecap="round"/>
+
+  <!-- دوو کەسی لاتەنیشت -->
+  <circle cx="140" cy="204" r="37" fill="#ffffff" fill-opacity=".92"/>
+  <rect x="94"  y="260" width="92" height="74" rx="32" fill="#ffffff" fill-opacity=".78"/>
+  <circle cx="372" cy="204" r="37" fill="#ffffff" fill-opacity=".92"/>
+  <rect x="326" y="260" width="92" height="74" rx="32" fill="#ffffff" fill-opacity=".78"/>
+
+  <!-- کەسی ناوەند -->
+  <circle cx="256" cy="154" r="52" fill="#e0a526"/>
+  <rect x="190" y="222" width="132" height="118" rx="48" fill="#e0a526"/>
+</svg>
